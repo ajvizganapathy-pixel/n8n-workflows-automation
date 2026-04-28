@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>n8n Setup & Installation Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff6d2e;
+            --primary-dark: #e55d1e;
+            --secondary: #1a1a1a;
+            --text-primary: #0f0f0f;
+            --text-secondary: #666;
+            --bg-light: #f8f8f8;
+            --bg-code: #1e1e1e;
+            --border: #e0e0e0;
+            --accent: #00d084;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2a2a2a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            border-bottom: 4px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+        }
+
+        nav {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+
+        nav h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        nav ul {
+            list-style: none;
+        }
+
+        nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        nav a {
+            display: block;
+            padding: 0.6rem 0.8rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+            background: rgba(255, 109, 46, 0.05);
+            border-left-color: var(--primary);
+            transform: translateX(4px);
+        }
+
+        nav a.active {
+            color: var(--primary);
+            font-weight: 600;
+            border-left-color: var(--primary);
+            background: rgba(255, 109, 46, 0.1);
+        }
+
+        main {
+            animation: fadeIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section {
+            background: white;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            scroll-margin-top: 120px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        h3::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 1.3rem;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .intro {
+            background: linear-gradient(135deg, rgba(255, 109, 46, 0.1) 0%, rgba(0, 208, 132, 0.05) 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: 50px 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: var(--bg-light);
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: white;
+            border: 1px solid var(--primary);
+            box-shadow: 0 4px 16px rgba(255, 109, 46, 0.1);
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .step-content p {
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        code {
+            background: var(--bg-code);
+            color: #fff;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: var(--bg-code);
+            color: #fff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border: 1px solid rgba(255, 109, 46, 0.2);
+        }
+
+        .token-keyword { color: #ff7ab2; }
+        .token-string { color: #4ec9b0; }
+        .token-function { color: #dcdcaa; }
+        .token-comment { color: #6a9955; }
+        .token-number { color: #b5cea8; }
+        .token-operator { color: #d4d4d4; }
+
+        .requirements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .requirement-card {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .requirement-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .requirement-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .warning, .info, .success {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left-color: #ffc107;
+            color: #856404;
+        }
+
+        .info {
+            background: rgba(33, 150, 243, 0.1);
+            border-left-color: #2196f3;
+            color: #004085;
+        }
+
+        .success {
+            background: rgba(0, 208, 132, 0.1);
+            border-left-color: var(--accent);
+            color: #00692c;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .command-block {
+            background: var(--bg-code);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Monaco', monospace;
+        }
+
+        .command-block code {
+            background: none;
+            color: #4ec9b0;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature {
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(255, 109, 46, 0.15);
+            border-color: var(--primary);
+        }
+
+        .feature h4 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 4px solid var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                position: relative;
+                top: 0;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .requirements, .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step {
+                grid-template-columns: 1fr;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>n8n Setup & Installation Guide</h1>
+            <p class="subtitle">Complete step-by-step documentation for deploying n8n workflow automation</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav>
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#overview" class="nav-link active">Overview</a></li>
+                <li><a href="#requirements" class="nav-link">Requirements</a></li>
+                <li><a href="#docker" class="nav-link">Docker Setup</a></li>
+                <li><a href="#npm" class="nav-link">NPM Installation</a></li>
+                <li><a href="#configuration" class="nav-link">Configuration</a></li>
+                <li><a href="#deployment" class="nav-link">Cloud Deployment</a></li>
+                <li><a href="#verification" class="nav-link">Verification</a></li>
+                <li><a href="#troubleshooting" class="nav-link">Troubleshooting</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- Overview Section -->
+            <section id="overview">
+                <h2>Overview</h2>
+                <div class="intro">
+                    <p>n8n is a free and open-source workflow automation platform that allows you to connect different apps and automate business processes. This guide covers the most common installation methods.</p>
+                </div>
+
+                <h3>What is n8n?</h3>
+                <p>n8n enables you to:</p>
+                <ul>
+                    <li>Automate repetitive tasks across multiple applications</li>
+                    <li>Connect 400+ integrations and APIs</li>
+                    <li>Build custom workflows with a visual editor</li>
+                    <li>Self-host for complete data control</li>
+                    <li>Deploy on your own infrastructure</li>
+                </ul>
+
+                <h3>Installation Methods</h3>
+                <p>n8n can be installed using:</p>
+                <ul>
+                    <li><strong>Docker</strong> (Recommended for quick setup)</li>
+                    <li><strong>npm</strong> (For development)</li>
+                    <li><strong>Cloud Platforms</strong> (AWS, Azure, DigitalOcean, etc.)</li>
+                    <li><strong>From Source</strong> (For advanced users)</li>
+                </ul>
+            </section>
+
+            <!-- Requirements Section -->
+            <section id="requirements">
+                <h2>System Requirements</h2>
+
+                <h3>Minimum Requirements</h3>
+                <div class="requirements">
+                    <div class="requirement-card">
+                        <h4>CPU</h4>
+                        <p>1+ Core (2+ cores recommended)</p>
+                    </div>
+                    <div class="requirement-card">
+                        <h4>RAM</h4>
+                        <p>2GB minimum (4GB+ recommended)</p>
+                    </div>
+                    <div class="requirement-card">
+                        <h4>Storage</h4>
+                        <p>10GB free space</p>
+                    </div>
+                    <div class="requirement-card">
+                        <h4>Database</h4>
+                        <p>SQLite (default) or PostgreSQL</p>
+                    </div>
+                </div>
+
+                <h3>Supported Operating Systems</h3>
+                <ul>
+                    <li>Linux (Ubuntu 18.04+, CentOS 7+, Debian 9+)</li>
+                    <li>macOS (10.15+)</li>
+                    <li>Windows (10/11 Pro)</li>
+                </ul>
+
+                <h3>Required Software</h3>
+                <div class="requirement-card" style="margin-top: 1.5rem;">
+                    <h4>Node.js</h4>
+                    <p><strong>Version:</strong> 18.10.0 or higher (LTS versions recommended)</p>
+                    <p><strong>Installation:</strong> Download from <code>nodejs.org</code> or use package manager</p>
+                </div>
+
+                <div class="success" style="margin-top: 2rem;">
+                    <strong>Pro Tip:</strong> Use Node Version Manager (nvm) for easy switching between Node versions.
+                </div>
+            </section>
+
+            <!-- Docker Setup -->
+            <section id="docker">
+                <h2>Docker Installation</h2>
+                <p>Docker is the recommended method for quick and clean installation.</p>
+
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>Docker Desktop installed and running</li>
+                    <li>Docker Compose (included with Docker Desktop)</li>
+                </ul>
+
+                <div class="info">
+                    <strong>Note:</strong> Docker must be installed before proceeding. Visit <code>docker.com</code> for installation instructions.
+                </div>
+
+                <h3>Step-by-Step Installation</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Create a Project Directory</h4>
+                            <p>Create a dedicated folder for your n8n installation:</p>
+                            <div class="command-block">
+                                <code>mkdir n8n && cd n8n</code>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Create docker-compose.yml</h4>
+                            <p>Create a docker-compose file with the following content:</p>
+                            <pre><span class="token-keyword">version</span>: <span class="token-string">'3'</span>
+
+<span class="token-keyword">services</span>:
+  <span class="token-function">n8n</span>:
+    <span class="token-keyword">image</span>: n8nio/n8n
+    <span class="token-keyword">ports</span>:
+      - <span class="token-string">"5678:5678"</span>
+    <span class="token-keyword">environment</span>:
+      - <span class="token-keyword">N8N_BASIC_AUTH_ACTIVE</span>=<span class="token-string">true</span>
+      - <span class="token-keyword">N8N_BASIC_AUTH_USER</span>=<span class="token-string">admin</span>
+      - <span class="token-keyword">N8N_BASIC_AUTH_PASSWORD</span>=<span class="token-string">password123</span>
+    <span class="token-keyword">volumes</span>:
+      - <span class="token-string">n8n_data:/home/node/.n8n</span>
+
+<span class="token-keyword">volumes</span>:
+  <span class="token-function">n8n_data</span>:</pre>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Start n8n Container</h4>
+                            <p>Launch the container using Docker Compose:</p>
+                            <div class="command-block">
+                                <code>docker-compose up -d</code>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                            <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #888;">This will download the image and start the container in the background.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Verify Installation</h4>
+                            <p>Check that the container is running:</p>
+                            <div class="command-block">
+                                <code>docker-compose ps</code>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                            <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #888;">You should see the n8n service with status "Up".</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4>Access n8n Interface</h4>
+                            <p>Open your browser and navigate to:</p>
+                            <div class="command-block">
+                                <code>http://localhost:5678</code>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                            <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #888;">Log in with credentials: admin / password123</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warning" style="margin-top: 2rem;">
+                    <strong>Important:</strong> Change the default password immediately in the n8n settings. Create a strong, unique password.
+                </div>
+            </section>
+
+            <!-- NPM Installation -->
+            <section id="npm">
+                <h2>NPM Installation</h2>
+                <p>For development environments or custom deployments.</p>
+
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>Node.js 18.10.0 or higher installed</li>
+                    <li>npm or yarn package manager</li>
+                </ul>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Verify Node.js Installation</h4>
+                            <p>Check your Node.js version:</p>
+                            <div class="command-block">
+                                <code>node --version && npm --version</code>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Install n8n Globally</h4>
+                            <p>Install n8n as a global npm package:</p>
+                            <div class="command-block">
+                                <code>npm install -g n8n</code>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Start n8n Server</h4>
+                            <p>Run the n8n startup command:</p>
+                            <div class="command-block">
+                                <code>n8n start</code>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                            <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #888;">Wait for the server to start. You'll see the URL in the console output.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Access the Web Interface</h4>
+                            <p>By default, n8n runs at:</p>
+                            <div class="command-block">
+                                <code>http://localhost:5678</code>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info" style="margin-top: 2rem;">
+                    <strong>Tip:</strong> Use <code>n8n start --tunnel</code> to automatically expose your instance to the internet via a secure tunnel for webhooks and external triggers.
+                </div>
+            </section>
+
+            <!-- Configuration -->
+            <section id="configuration">
+                <h2>Configuration & Setup</h2>
+                <p>Customize your n8n installation for production use.</p>
+
+                <h3>Environment Variables</h3>
+                <p>Key environment variables for n8n configuration:</p>
+                <pre><span class="token-comment"># Basic Authentication</span>
+<span class="token-keyword">N8N_BASIC_AUTH_ACTIVE</span>=<span class="token-string">true</span>
+<span class="token-keyword">N8N_BASIC_AUTH_USER</span>=<span class="token-string">admin</span>
+<span class="token-keyword">N8N_BASIC_AUTH_PASSWORD</span>=<span class="token-string">your-secure-password</span>
+
+<span class="token-comment"># Database Configuration</span>
+<span class="token-keyword">DB_TYPE</span>=<span class="token-string">postgres</span>
+<span class="token-keyword">DB_POSTGRESDB_HOST</span>=<span class="token-string">localhost</span>
+<span class="token-keyword">DB_POSTGRESDB_PORT</span>=<span class="token-string">5432</span>
+<span class="token-keyword">DB_POSTGRESDB_DATABASE</span>=<span class="token-string">n8n</span>
+<span class="token-keyword">DB_POSTGRESDB_USER</span>=<span class="token-string">n8n</span>
+<span class="token-keyword">DB_POSTGRESDB_PASSWORD</span>=<span class="token-string">password</span>
+
+<span class="token-comment"># Server Configuration</span>
+<span class="token-keyword">N8N_HOST</span>=<span class="token-string">0.0.0.0</span>
+<span class="token-keyword">N8N_PORT</span>=<span class="token-string">5678</span>
+<span class="token-keyword">N8N_PROTOCOL</span>=<span class="token-string">http</span></pre>
+
+                <h3>Using PostgreSQL Database</h3>
+                <p>For production, PostgreSQL is recommended over SQLite:</p>
+                
+                <pre><span class="token-keyword">version</span>: <span class="token-string">'3'</span>
+
+<span class="token-keyword">services</span>:
+  <span class="token-function">n8n</span>:
+    <span class="token-keyword">image</span>: n8nio/n8n
+    <span class="token-keyword">environment</span>:
+      - <span class="token-keyword">DB_TYPE</span>=<span class="token-string">postgres</span>
+      - <span class="token-keyword">DB_POSTGRESDB_HOST</span>=<span class="token-string">postgres</span>
+      - <span class="token-keyword">DB_POSTGRESDB_PORT</span>=<span class="token-string">5432</span>
+      - <span class="token-keyword">DB_POSTGRESDB_USER</span>=<span class="token-string">n8n</span>
+      - <span class="token-keyword">DB_POSTGRESDB_PASSWORD</span>=<span class="token-string">n8n_password</span>
+      - <span class="token-keyword">DB_POSTGRESDB_DATABASE</span>=<span class="token-string">n8n</span>
+
+  <span class="token-function">postgres</span>:
+    <span class="token-keyword">image</span>: postgres:15
+    <span class="token-keyword">environment</span>:
+      - <span class="token-keyword">POSTGRES_USER</span>=<span class="token-string">n8n</span>
+      - <span class="token-keyword">POSTGRES_PASSWORD</span>=<span class="token-string">n8n_password</span>
+      - <span class="token-keyword">POSTGRES_DB</span>=<span class="token-string">n8n</span></pre>
+            </section>
+
+            <!-- Deployment -->
+            <section id="deployment">
+                <h2>Cloud Deployment</h2>
+                <p>Deploy n8n on popular cloud platforms:</p>
+
+                <h3>Deployment Options</h3>
+                <div class="feature-grid">
+                    <div class="feature">
+                        <h4>DigitalOcean</h4>
+                        <p>Use the official n8n DigitalOcean App to deploy with one click. Includes all dependencies and automatic updates.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>AWS</h4>
+                        <p>Deploy using EC2, ECS, or Elastic Beanstalk. Customize resources based on your workload requirements.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>Microsoft Azure</h4>
+                        <p>Use App Service or Container Instances for managed n8n deployment with enterprise-grade security.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>Heroku</h4>
+                        <p>Deploy using Heroku CLI or connect your GitHub repository for automatic deployments.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>Render</h4>
+                        <p>Deploy a free n8n instance on Render with automatic SSL certificates and easy scaling.</p>
+                    </div>
+                    <div class="feature">
+                        <h4>Railway</h4>
+                        <p>Simple deployment with Railway's intuitive interface and GitHub integration support.</p>
+                    </div>
+                </div>
+
+                <h3>Important Considerations</h3>
+                <ul>
+                    <li><strong>SSL/TLS:</strong> Always use HTTPS in production for secure communication</li>
+                    <li><strong>Backups:</strong> Regular backups of database and configuration files</li>
+                    <li><strong>Monitoring:</strong> Set up logging and monitoring for uptime tracking</li>
+                    <li><strong>Security:</strong> Change default credentials and use strong passwords</li>
+                    <li><strong>Updates:</strong> Keep n8n updated to the latest stable version</li>
+                </ul>
+            </section>
+
+            <!-- Verification -->
+            <section id="verification">
+                <h2>Verification & Testing</h2>
+                <p>Ensure your n8n installation is working correctly.</p>
+
+                <h3>Health Checks</h3>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Access Web Interface</h4>
+                            <p>Open browser and navigate to your n8n instance URL</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Check Health Endpoint</h4>
+                            <p>Test the health check API endpoint:</p>
+                            <div class="command-block">
+                                <code>curl http://localhost:5678/api/v1/health</code>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                            <p style="margin-top: 0.8rem; font-size: 0.9rem;">Should return a 200 status with database status info.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Create First Workflow</h4>
+                            <p>Create a simple test workflow to verify functionality</p>
+                            <ul>
+                                <li>Click "New Workflow"</li>
+                                <li>Add a "Manual" trigger node</li>
+                                <li>Add any node (e.g., "Set" node)</li>
+                                <li>Save and execute</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="success" style="margin-top: 2rem;">
+                    <strong>Success!</strong> If you can log in, access the dashboard, and create a workflow, your n8n installation is working correctly.
+                </div>
+            </section>
+
+            <!-- Troubleshooting -->
+            <section id="troubleshooting">
+                <h2>Troubleshooting</h2>
+                <p>Common issues and solutions:</p>
+
+                <h3>Cannot Access Web Interface</h3>
+                <div class="requirement-card">
+                    <h4>Issue</h4>
+                    <p>Browser shows "Connection refused" or timeout error</p>
+                    <h4 style="margin-top: 1rem;">Solutions</h4>
+                    <ul>
+                        <li>Verify n8n is running: <code>docker-compose ps</code> or check process list</li>
+                        <li>Check firewall rules for port 5678</li>
+                        <li>Ensure correct URL: <code>http://localhost:5678</code></li>
+                        <li>Check logs: <code>docker-compose logs n8n</code></li>
+                    </ul>
+                </div>
+
+                <h3>Database Connection Error</h3>
+                <div class="requirement-card">
+                    <h4>Issue</h4>
+                    <p>Error connecting to PostgreSQL or database initialization fails</p>
+                    <h4 style="margin-top: 1rem;">Solutions</h4>
+                    <ul>
+                        <li>Verify database credentials match environment variables</li>
+                        <li>Ensure PostgreSQL container is running</li>
+                        <li>Check database user has correct permissions</li>
+                        <li>Review logs for specific error messages</li>
+                    </ul>
+                </div>
+
+                <h3>High Memory Usage</h3>
+                <div class="requirement-card">
+                    <h4>Issue</h4>
+                    <p>n8n consuming excessive memory resources</p>
+                    <h4 style="margin-top: 1rem;">Solutions</h4>
+                    <ul>
+                        <li>Limit Node.js memory: Set <code>--max-old-space-size=2048</code></li>
+                        <li>Optimize workflows: Remove unnecessary loops</li>
+                        <li>Clean up old logs and data</li>
+                        <li>Use PostgreSQL instead of SQLite for better performance</li>
+                    </ul>
+                </div>
+
+                <h3>SSL Certificate Issues</h3>
+                <div class="requirement-card">
+                    <h4>Issue</h4>
+                    <p>"SSL: CERTIFICATE_VERIFY_FAILED" error with webhooks</p>
+                    <h4 style="margin-top: 1rem;">Solutions</h4>
+                    <ul>
+                        <li>Ensure HTTPS is properly configured</li>
+                        <li>Set <code>NODE_TLS_REJECT_UNAUTHORIZED=0</code> for testing only</li>
+                        <li>Use valid SSL certificates in production</li>
+                        <li>Verify external service SSL configuration</li>
+                    </ul>
+                </div>
+
+                <div class="info" style="margin-top: 2rem;">
+                    <strong>Need Help?</strong> Visit the n8n Community Forum or check the documentation at <code>docs.n8n.io</code>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 n8n Setup Guide | Comprehensive documentation for installation and deployment</p>
+    </footer>
+
+    <script>
+        // Smooth scroll for nav links
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        // Copy button functionality
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        copyButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const code = btn.previousElementSibling.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    btn.style.background = 'var(--accent)';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.background = 'var(--primary)';
+                    }, 2000);
+                });
+            });
+        });
+
+        // Update active nav link on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
