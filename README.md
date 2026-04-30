@@ -4,6 +4,10 @@
 [![n8n Version](https://img.shields.io/badge/n8n-%3E%3D1.0.0-blue.svg)](https://n8n.io)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.10.0-green.svg)](https://nodejs.org)
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](#)
+[![GitHub Stars](https://img.shields.io/github/stars/ajvizganapathy-pixel/n8n-workflows-automation?style=social)](https://github.com/ajvizganapathy-pixel/n8n-workflows-automation/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/ajvizganapathy-pixel/n8n-workflows-automation?style=social)](https://github.com/ajvizganapathy-pixel/n8n-workflows-automation/network/members)
+[![GitHub Issues](https://img.shields.io/github/issues/ajvizganapathy-pixel/n8n-workflows-automation)](https://github.com/ajvizganapathy-pixel/n8n-workflows-automation/issues)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/ajvizganapathy-pixel/n8n-workflows-automation/blob/main/CONTRIBUTING.md)
 
 A comprehensive collection of production-ready n8n workflows and automation solutions for seamless business process integration.
 
@@ -89,7 +93,7 @@ Depending on workflows used, you'll need API keys/credentials for:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/n8n-workflows.git
+   git clone https://github.com/ajvizganapathy-pixel/n8n-workflows.git
    cd n8n-workflows
    ```
 
@@ -117,7 +121,7 @@ Depending on workflows used, you'll need API keys/credentials for:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/n8n-workflows.git
+   git clone https://github.com/ajvizganapathy-pixel/n8n-workflows.git
    cd n8n-workflows
    ```
 
@@ -391,7 +395,7 @@ We welcome contributions! Here's how to help:
 
 1. **Fork the repository**
    ```bash
-   git clone https://github.com/yourusername/n8n-workflows.git
+   git clone https://github.com/ajvizganapathy-pixel/n8n-workflows.git
    cd n8n-workflows
    git checkout -b feature/new-workflow
    ```
@@ -458,7 +462,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ### Current Version
 - **v1.0.0** - Initial release with core workflows
-- Last Updated: 2024
+- Last Updated: 2026
 
 ### Planned Features
 - [ ] Advanced analytics workflows
